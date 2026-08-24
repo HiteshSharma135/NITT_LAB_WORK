@@ -1,0 +1,98 @@
+// to print the pattern
+rows=int(input("enter the number of rows "))
+
+for i in range(1,rows+1):
+    for j in range(1,i+1):
+        print("*",end="")
+    print()
+
+// to find the area of triangle
+a=int(input("enter the side 1 :"))
+b=int(input("enter the side 2 :"))
+c=int(input("enter the side 3 :"))
+
+s=(a+b+c)/2
+
+area=pow(s*(s-a)*(s-b)*(s-c),0.5)
+print(area)
+
+//to reverse a number
+num=int(input("enter the number :"))
+
+reverse=0 // it is used to concatenate the numbers as otherwise its showing the number is different lines
+
+while(num!=0):
+    digit=num%10
+    reverse=reverse*10+digit// logic is used because we want to concatenate all the digits
+    num=int(num/10)
+print("the reverse of number is :",reverse)
+
+//given the ram size ,then we have find the address bus size.
+
+import math
+
+unit=(input("enter the unit of ram size :"))
+ram=int(input("enter the ram size: "))
+
+if(unit=='kb'):
+    ram=ram*1024
+elif unit=='mb':
+    ram=ram*1024*1024
+else:
+    ram=ram*1024*1024*1024
+
+adress_bus=int(math.log(ram,2))
+
+print("the address bus size is: ",adress_bus)
+
+
+//size of hard disk to no. of bytes it hold
+import math
+
+unit=input("enter the unit of size of Hard Disk :")
+size=int(input("enter the size of Hard Disk :"))
+
+if(unit == 'kb'):
+    bytes=size*pow(2,10)
+elif(unit=='mb'):
+    bytes=size*pow(2,20)
+elif(unit=='gb'):
+    bytes=size*pow(2,30)
+else:
+    bytes=size*pow(2,40)
+
+print("No. of bytes in Hard Disk is: ",bytes)
+
+
+//date is valid or not
+date=int(input("enter the date: "))
+month=input("enter the month: ")
+year=int(input("enter the year: "))
+
+if(month=='january' or month=='march' or month=='may' or month=='july' or month=='august' or month=='october' or month=='december'):
+    if(0<date<32):
+        print("date is valid")
+    else:
+        print("date is Invalid")
+
+elif(month=='april' or month=='june' or month=='september' or month=='november'):
+    if(0<date<31):
+        print("date is valid")
+    else:
+        print("date is Invalid")
+elif(month=='febraury'):
+    if(year%400==0):
+        if(0<date<30):
+            print("date is valid")
+        else:
+            print("date is Invalid")
+    elif(year%4==0 and year%100!=0):
+         if(0<date<30):
+            print("date is valid")
+    else:
+        if(0<date<29):
+            print("date is valid")
+        else:
+            print("date is Invalid")
+else:
+    print("date is invalid")
