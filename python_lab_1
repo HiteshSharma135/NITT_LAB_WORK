@@ -144,3 +144,24 @@ while(num!=1):
     num=int(num/2)
     print(digit)
 print(1)
+NEED TO REVERSE THE NO. 
+
+
+// DONATION PROBLEM NOT COMPLETE
+strength=int(input("enter the no. of students in class: "))
+for i in range(1,strength):
+    ROLL_NO=int(input("enter your roll no. "))
+    stu=input("enter the present or absent ")
+
+    if(stu=='present'):
+        while(ROLL_NO!=0):
+            digit=ROLL_NO%100
+            ROLL_NO=int(ROLL_NO/100)
+            sum=sum+digit
+            break
+
+
+
+
+
+print("total amount of donation is: ",sum)
