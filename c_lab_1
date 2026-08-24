@@ -1,0 +1,190 @@
+//convert fahrenhiet to celsius
+
+#include<stdio.h>
+int main()
+{ 
+    float fah,c;
+    printf("enter the temperature in celsius \n");
+    scanf("%f",&c);
+    fah=(1.8*c)+32;
+    printf("the temperature in fahrenhiet is %0.2f",fah);
+    return 0;
+}
+
+
+
+// to reverse a number
+#include<stdio.h>
+int main()
+{ 
+   // to reverse a number
+
+   int num,sum,digit;
+   printf("enter the number: \n");
+   scanf("%d",&num);
+   while(num!=0)
+   {
+    digit=num%10;
+    num=num/10;
+    printf("%d",digit);
+     
+   }
+   return 0;
+
+}
+
+
+// series of sinx
+#include<stdio.h>
+#include<math.h>
+int main()
+{ 
+   float x,n,sum=0;
+   printf("enter the value of n upto the series you want : \n");
+   scanf("%f",&n);
+   printf("enter the value of x : \n");
+   scanf("%f",&x);
+   int sign=1;
+
+   for (int term=1;term<=n;term++)
+   {
+    int fact=1;
+
+    for (int i=1;i<=2*term-1;i++)
+    {
+        fact=fact*i;
+    }
+    sum=sum+sign*(pow(x,2*term-1)/fact);
+    sign=-sign;
+   }
+   printf("the value of sum of the series is : %0.2f\n",sum);
+
+   
+   return 0;
+
+}
+
+
+// fibonacci series
+#include<stdio.h>
+#include<math.h>
+int main()
+{ 
+  // fibonacci number
+  int num,sum=0;
+  printf("enter the value of num upto fionacci series you want : \n");
+  scanf("%d",&num);
+   int prev=0;
+   int cur=1;
+   printf(" %d",prev);
+   printf(" %d",cur);
+  for (int i=2;i<=num;i++)
+  {
+    int new_num=prev+cur;
+   prev=cur;
+   cur=new_num;
+   printf(" %d",cur);
+
+  }
+
+  return 0;
+}
+
+// perfect number
+
+#include<stdio.h>
+#include<math.h>
+int main()
+{ 
+    // to check whether number is perfect or not
+  int num,sum=0;
+  printf("enter the num : ");
+  scanf("%d",&num);
+  for(int i=1;i<=num/2;i++)
+  {
+    if(num%i==0)
+    {
+        sum+=i;
+    }
+  }
+  if(sum==num)
+  {
+    printf("the number is perfect number: %d",num);
+  }
+  else{
+    printf("the number is not perfect number: %d",num);
+  }
+
+  return 0;
+}
+
+//armstrong no.
+#include <stdio.h>
+#include<math.h>
+
+int main() {
+    // check whether no. is armstrong number or not
+
+    int num,sum=0,digit,new_num;
+    printf("enter the number : ");
+    scanf("%d",&num);
+    new_num=num;
+
+    while(new_num!=0)
+    {
+        digit=new_num%10;
+        new_num=new_num/10;
+
+        sum=sum+pow(digit,3);
+    }
+    if(sum==num)
+    {
+        printf("it is armstrong no. %d",num);
+    }
+    else{
+         printf("it is not armstrong no. %d",num);
+    }
+
+    return 0;
+}
+
+
+// armstrong no. generalised 
+// Online C compiler to run C program online
+#include <stdio.h>
+#include<math.h>
+
+int main() {
+    // check whether no. is armstrong number or not
+
+    int num,sum=0,digit,new_num,num1;
+    printf("enter the number : ");
+    scanf("%d",&num);
+    new_num=num;
+    num1=num;
+    int count=0;
+    while(num1!=0)
+    { 
+        digit=num1%10;
+        num1=num1/10;
+        count = count +1;
+       
+    }
+ 
+    while(new_num!=0)
+    {
+        digit=new_num%10;
+        new_num=new_num/10;
+
+        sum=sum+pow(digit,count);
+    }
+    if(sum==num)
+    {
+        printf("it is armstrong no. %d",num);
+    }
+    else{
+         printf("it is not armstrong no. %d",num);
+    }
+
+    return 0;
+}
