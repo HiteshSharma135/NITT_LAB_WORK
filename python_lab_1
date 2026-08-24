@@ -96,3 +96,51 @@ elif(month=='febraury'):
             print("date is Invalid")
 else:
     print("date is invalid")
+
+//SIMPLE IF ELSE
+import math
+
+n=int(input("enter the value of n: "))
+x=int(input("enter the value of x: "))
+
+if(n==0):
+    y=x
+elif(n==1):
+    y=x+1
+elif(n==2):
+    y=pow(x,2)+n
+else:
+    y=pow(x,n)
+print("the value of y is: ",y)
+
+// ARMSTRONG NO.
+import math
+
+num=int(input("enter the number: "))
+count=0
+sum=0
+num1=num
+num2=num
+while(num1!=0):
+    digit=num1%10
+    num1=int(num1/10)
+    count=count+1
+
+while(num2!=0):
+    digit=num2%10
+    num2=int(num2/10)
+    sum=sum+pow(digit,count)
+    
+if(sum==num):
+    print("it is armstrong no. ",num)
+else:
+    print("it is not a armstrong no. ",num)
+
+//DECIMAL TO BINARY
+num=int(input("enter the number: "))
+
+while(num!=1):
+    digit=num%2
+    num=int(num/2)
+    print(digit)
+print(1)
