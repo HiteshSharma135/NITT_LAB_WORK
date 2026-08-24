@@ -1,4 +1,4 @@
-// to print the pattern
+// TO PRINT THE PATTERN
 rows=int(input("enter the number of rows "))
 
 for i in range(1,rows+1):
@@ -6,7 +6,7 @@ for i in range(1,rows+1):
         print("*",end="")
     print()
 
-// to find the area of triangle
+// AREA OF TRIANGLE
 a=int(input("enter the side 1 :"))
 b=int(input("enter the side 2 :"))
 c=int(input("enter the side 3 :"))
@@ -16,7 +16,7 @@ s=(a+b+c)/2
 area=pow(s*(s-a)*(s-b)*(s-c),0.5)
 print(area)
 
-//to reverse a number
+//REVERSE A NUMBER
 num=int(input("enter the number :"))
 
 reverse=0 // it is used to concatenate the numbers as otherwise its showing the number is different lines
@@ -27,7 +27,7 @@ while(num!=0):
     num=int(num/10)
 print("the reverse of number is :",reverse)
 
-//given the ram size ,then we have find the address bus size.
+//RAM SIZE TO ADDRESS BUS SIZE
 
 import math
 
@@ -46,7 +46,7 @@ adress_bus=int(math.log(ram,2))
 print("the address bus size is: ",adress_bus)
 
 
-//size of hard disk to no. of bytes it hold
+//SIZE OF HARD SIZE TO NO.OF BYTES
 import math
 
 unit=input("enter the unit of size of Hard Disk :")
@@ -64,7 +64,7 @@ else:
 print("No. of bytes in Hard Disk is: ",bytes)
 
 
-//date is valid or not
+//DATE IS VALID OR NOT
 date=int(input("enter the date: "))
 month=input("enter the month: ")
 year=int(input("enter the year: "))
