@@ -263,6 +263,3 @@ print("year: ",year)
 
 
 
-
-
-print("total amount of donation is: ",sum)
