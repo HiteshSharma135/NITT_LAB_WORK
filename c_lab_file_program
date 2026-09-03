@@ -1,14 +1,12 @@
-// program 1 .lexographical order
-
 #include <stdio.h>
 #include <string.h>
 
 void selection_sort(char str[][50])
 {
-     char temp[50];
-    
+	char temp[50];
 
-    for (int i =0; i< 5; i++)
+
+	for (int i =0; i< 5; i++)
 	{
 		int min = i;
 		for(int j=i; j< 5; j++)
@@ -18,68 +16,78 @@ void selection_sort(char str[][50])
 				min = j;
 			}
 		}
-        strcpy(temp,str[i]);
-        strcpy(str[i],str[min]);
-        strcpy(str[min],temp);
-        
+		strcpy(temp,str[i]);
+		strcpy(str[i],str[min]);
+		strcpy(str[min],temp);
+
 	}
-	
-    
+
+
 }
 int binary_search(char str[][50], char *target)
 {
-    int left=0,right=4;
-    
-    while(left<=right)
-    {
-        int mid= (left + right )/2;
-        int res = strcmp(str[mid],target);
-        
-        if(res == 0)
-        return mid;
-        
-        else 
-        right = mid -1;
-    }
-    return -1;
+	int left = 0, right = 4;
+
+	while (left <= right)
+	{
+		int mid = left + (right - left) / 2;
+
+		int res = strcmp(str[mid], target);
+
+		if (res == 0)
+		{
+			return mid;
+		}
+		else if (res > 0)
+		{
+			
+			right = mid - 1;
+		}
+		else
+		{
+			
+			left = mid + 1;
+		}
+	}
+
+	return -1;
 }
 
 
 int main() {
-    // Array to store 5 strings, each with a maximum length of 50 characters
-    char str[5][50];
-    char temp[50];
-    
-    char target[50] ;
-    
-    
-
-    printf("Enter 5 words:\n");
-    for (int i = 0; i < 5; ++i) {
-       
-        scanf("%s", str[i]); 
-    }
-    
-    selection_sort(str);
 	
-    printf("\nIn lexicographical order:\n");
-    for (int i = 0; i < 5; ++i) {
-        printf("%s\n", str[i]);
-    }
-    
-    printf("enter the target: \n");
-    scanf("%s",target);
-    
-    int index = binary_search(str,target);
-    
-    
-    if(index!= -1)
-    printf("target is at index : %d",index);
-    
-    else
-    printf("target not found");
-    
-    
+	char str[5][50];
 
-    return 0;
+	char target[50] ;
+
+
+
+	printf("Enter 5 words:\n");
+	for (int i = 0; i < 5; ++i) {
+
+		scanf("%s", str[i]);
+	}
+
+	selection_sort(str);
+
+	printf("\nIn lexicographical order:\n");
+	for (int i = 0; i < 5; ++i) {
+		printf("%s\n", str[i]);
+	}
+
+	printf("enter the target: \n");
+	scanf("%s",target);
+
+	int index = binary_search(str,target);
+
+
+	if(index!= -1)
+		printf("target is at index : %d",index);
+
+	else
+		printf("target not found");
+
+
+
+	return 0;
 }
