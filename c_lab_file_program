@@ -1,3 +1,4 @@
+Question no.1 
 #include <stdio.h>
 #include <string.h>
 
@@ -91,3 +92,336 @@ int main() {
 
 	return 0;
 }
+
+
+QUESTION NO.2 METADATA
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 10
+
+/* Video metadata */
+struct Video
+{
+    int id;
+    char subject[50];
+    char topic[50];
+    int duration;
+    char date[20];
+    char url[100];
+};
+
+/* Singly linked list */
+struct SNode
+{
+    struct Video v;
+    struct SNode *next;
+};
+
+/* Doubly linked list */
+struct DNode
+{
+    struct Video v;
+    struct DNode *prev;
+    struct DNode *next;
+};
+
+
+/* Add video to singly linked list */
+void addSingly(struct SNode **head, struct Video v)
+{
+    struct SNode *newNode = malloc(sizeof(struct SNode));
+    struct SNode *temp;
+
+    newNode->v = v;
+    newNode->next = NULL;
+
+    if (*head == NULL)
+    {
+        *head = newNode;
+        return;
+    }
+
+    temp = *head;
+
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = newNode;
+}
+
+
+/* Display singly linked list */
+void displaySingly(struct SNode *head)
+{
+    printf("\n--- Video Sequence ---\n");
+
+    while (head != NULL)
+    {
+        printf("ID: %d | Topic: %s | Duration: %d mins\n",
+               head->v.id,
+               head->v.topic,
+               head->v.duration);
+
+        head = head->next;
+    }
+}
+
+
+/* Convert singly linked list to doubly linked list */
+struct DNode *convertToDoubly(struct SNode *head)
+{
+    struct DNode *dHead = NULL;
+    struct DNode *last = NULL;
+    struct DNode *newNode;
+
+    while (head != NULL)
+    {
+        newNode = malloc(sizeof(struct DNode));
+
+        newNode->v = head->v;
+        newNode->prev = last;
+        newNode->next = NULL;
+
+        if (dHead == NULL)
+            dHead = newNode;
+        else
+            last->next = newNode;
+
+        last = newNode;
+        head = head->next;
+    }
+
+    return dHead;
+}
+
+
+/* Display forward */
+void forward(struct DNode *head)
+{
+    printf("\n--- Forward ---\n");
+
+    while (head != NULL)
+    {
+        printf("%d - %s\n",
+               head->v.id,
+               head->v.topic);
+
+        head = head->next;
+    }
+}
+
+
+/* Display backward */
+void backward(struct DNode *head)
+{
+    struct DNode *temp = head;
+
+    if (temp == NULL)
+        return;
+
+    /* Go to last node */
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    printf("\n--- Backward ---\n");
+
+    while (temp != NULL)
+    {
+        printf("%d - %s\n",
+               temp->v.id,
+               temp->v.topic);
+
+        temp = temp->prev;
+    }
+}
+
+
+/* Add a new topic */
+void addTopic(struct DNode **head)
+{
+    struct DNode *newNode;
+    struct DNode *temp;
+
+    newNode = malloc(sizeof(struct DNode));
+
+    printf("\nEnter Video ID: ");
+    scanf("%d", &newNode->v.id);
+
+    printf("Enter Subject: ");
+    scanf(" %[^\n]", newNode->v.subject);
+
+    printf("Enter Topic: ");
+    scanf(" %[^\n]", newNode->v.topic);
+
+    printf("Enter Duration: ");
+    scanf("%d", &newNode->v.duration);
+
+    printf("Enter Date: ");
+    scanf(" %[^\n]", newNode->v.date);
+
+    printf("Enter URL: ");
+    scanf(" %[^\n]", newNode->v.url);
+
+    newNode->next = NULL;
+    newNode->prev = NULL;
+
+    if (*head == NULL)
+    {
+        *head = newNode;
+        return;
+    }
+
+    temp = *head;
+
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = newNode;
+    newNode->prev = temp;
+
+    printf("\nNew topic added successfully!\n");
+}
+
+
+/* Remove a topic chosen by user */
+void removeTopic(struct DNode **head)
+{
+    char topic[50];
+    struct DNode *temp = *head;
+
+    printf("\nEnter topic to remove: ");
+    scanf(" %[^\n]", topic);
+
+    while (temp != NULL)
+    {
+        if (strcmp(temp->v.topic, topic) == 0)
+        {
+            if (temp->prev != NULL)
+                temp->prev->next = temp->next;
+            else
+                *head = temp->next;
+
+            if (temp->next != NULL)
+                temp->next->prev = temp->prev;
+
+            free(temp);
+
+            printf("Topic '%s' removed successfully!\n", topic);
+            return;
+        }
+
+        temp = temp->next;
+    }
+
+    printf("Topic not found!\n");
+}
+
+
+/* Main */
+int main()
+{
+    struct Video videos[5] =
+    {
+        {101, "Data Structures", "Arrays", 30,
+         "10-01-2025", "url1"},
+
+        {102, "Data Structures", "Linked List", 45,
+         "11-01-2025", "url2"},
+
+        {103, "Data Structures", "Stack", 35,
+         "12-01-2025", "url3"},
+
+        {104, "Data Structures", "Queue", 40,
+         "13-01-2025", "url4"},
+
+        {105, "Data Structures", "Trees", 50,
+         "14-01-2025", "url5"}
+    };
+
+    char syllabus[5][50] =
+    {
+        "Arrays",
+        "Linked List",
+        "Stack",
+        "Queue",
+        "Trees"
+    };
+
+    struct SNode *sHead = NULL;
+    struct DNode *dHead;
+
+    int i, j;
+    int choice;
+
+    /* Create syllabus-wise singly linked list */
+
+    for (i = 0; i < 5; i++)
+    {
+        for (j = 0; j < 5; j++)
+        {
+            if (strcmp(syllabus[i], videos[j].topic) == 0)
+            {
+                addSingly(&sHead, videos[j]);
+                break;
+            }
+        }
+    }
+
+    /* First stage: forward only */
+    displaySingly(sHead);
+
+    /* Convert to doubly linked list */
+    dHead = convertToDoubly(sHead);
+
+    /* Menu */
+    do
+    {
+        printf("\n\n===== MENU =====\n");
+        printf("1. Move Forward\n");
+        printf("2. Move Backward\n");
+        printf("3. Add Topic\n");
+        printf("4. Remove Topic\n");
+        printf("5. Display Current Sequence\n");
+        printf("6. Exit\n");
+
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+            case 1:
+                forward(dHead);
+                break;
+
+            case 2:
+                backward(dHead);
+                break;
+
+            case 3:
+                addTopic(&dHead);
+                break;
+
+            case 4:
+                removeTopic(&dHead);
+                break;
+
+            case 5:
+                forward(dHead);
+                break;
+
+            case 6:
+                printf("\nProgram ended.\n");
+                break;
+
+            default:
+                printf("\nInvalid choice!\n");
+        }
+
+    } while (choice != 6);
+
+    return 0;
+}
+
