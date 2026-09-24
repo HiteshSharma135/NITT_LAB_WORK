@@ -309,5 +309,208 @@ int main()
 
     printf("\nProgram ended.\n");
 
+
+program 2
+
+#include <stdio.h>
+
+#define MAX 10
+
+// Structure for one job
+struct Job
+{
+    int job;
+    int burst;
+    int remaining;
+};
+
+// Structure for circular queue
+struct Queue
+{
+    struct Job jobs[MAX];
+    int front;
+    int rear;
+};
+
+// Insert a job into the queue
+void insert(struct Queue *q, struct Job j)
+{
+    if ((q->rear + 1) % MAX == q->front)
+    {
+        printf("Queue is full\n");
+        return;
+    }
+
+    // First job
+    if (q->front == -1)
+    {
+        q->front = 0;
+        q->rear = 0;
+    }
+    else
+    {
+        q->rear = (q->rear + 1) % MAX;
+    }
+
+    q->jobs[q->rear] = j;
+}
+
+// Delete a job from the queue
+struct Job delete(struct Queue *q)
+{
+    struct Job j;
+
+    j.job = -1;
+    j.burst = 0;
+    j.remaining = 0;
+
+    if (q->front == -1)
+    {
+        printf("Queue is empty\n");
+        return j;
+    }
+
+    j = q->jobs[q->front];
+
+    // Only one job is present
+    if (q->front == q->rear)
+    {
+        q->front = -1;
+        q->rear = -1;
+    }
+    else
+    {
+        q->front = (q->front + 1) % MAX;
+    }
+
+    return j;
+}
+
+// Function to enter burst times
+void getJobs(struct Queue *q, int n)
+{
+    struct Job j;
+    int i;
+
+    for (i = 1; i <= n; i++)
+    {
+        j.job = i;
+
+        printf("Enter burst time for Job %d: ", i);
+        scanf("%d", &j.burst);
+
+        // Initially remaining time = burst time
+        j.remaining = j.burst;
+
+        insert(q, j);
+    }
+}
+
+// Round Robin scheduling
+void roundRobin(struct Queue *q, int quantum)
+{
+    struct Job j;
+    int time = 0;
+
+    printf("\n--- Round Robin Execution ---\n");
+
+    while (q->front != -1)
+    {
+        // Remove job from front
+        j = delete(q);
+
+        printf("\nJob %d is running", j.job);
+
+        // If remaining time is greater than quantum
+        if (j.remaining > quantum)
+        {
+            printf(" for %d units", quantum);
+
+            j.remaining = j.remaining - quantum;
+
+            time = time + quantum;
+
+            // Put unfinished job back into queue
+            insert(q, j);
+
+            printf("\nRemaining time of Job %d = %d",
+                   j.job, j.remaining);
+        }
+        else
+        {
+            // Job can finish in this turn
+            printf(" for %d units", j.remaining);
+
+            time = time + j.remaining;
+
+            j.remaining = 0;
+
+            printf("\nJob %d completed at time %d",
+                   j.job, time);
+        }
+    }
+
+    printf("\n\nAll jobs completed.\n");
+}
+
+// Display jobs
+void display(struct Queue *q)
+{
+    int i;
+
+    if (q->front == -1)
+    {
+        printf("Queue is empty\n");
+        return;
+    }
+
+    printf("\nJobs in queue:\n");
+
+    i = q->front;
+
+    while (1)
+    {
+        printf("Job %d - Burst Time: %d - Remaining: %d\n",
+               q->jobs[i].job,
+               q->jobs[i].burst,
+               q->jobs[i].remaining);
+
+        if (i == q->rear)
+            break;
+
+        i = (i + 1) % MAX;
+    }
+}
+
+int main()
+{
+    struct Queue q;
+
+    int n;
+    int quantum;
+
+    // Initialize queue
+    q.front = -1;
+    q.rear = -1;
+
+    printf("Enter number of jobs: ");
+    scanf("%d", &n);
+
+    printf("Enter time quantum: ");
+    scanf("%d", &quantum);
+
+    // Get jobs and burst times
+    getJobs(&q, n);
+
+    // Display initial jobs
+    display(&q);
+
+    // Run Round Robin
+    roundRobin(&q, quantum);
+
+    return 0;
+}
+
+
     return 0;
 }
