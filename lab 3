@@ -1,0 +1,313 @@
+// question no.3 of dsa with c
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#include <math.h>
+
+#define MAX 200
+
+// ---------------- CHARACTER STACK ----------------
+
+struct CharStack
+{
+    char stack[MAX];
+    int top;
+};
+
+// ---------------- INTEGER STACK ----------------
+
+struct IntStack
+{
+    double stack[MAX];
+    int top;
+};
+
+// ---------------- CHAR STACK FUNCTIONS ----------------
+
+void pushChar(struct CharStack *s, char x)
+{
+    if (s->top == MAX - 1)
+        printf("Stack Overflow\n");
+    else
+        s->stack[++s->top] = x;
+}
+
+char popChar(struct CharStack *s)
+{
+    if (s->top == -1)
+        return '\0';
+
+    return s->stack[s->top--];
+}
+
+// ---------------- INT STACK FUNCTIONS ----------------
+
+void pushInt(struct IntStack *s, double x)
+{
+    if (s->top == MAX - 1)
+        printf("Stack Overflow\n");
+    else
+        s->stack[++s->top] = x;
+}
+
+double popInt(struct IntStack *s)
+{
+    if (s->top == -1)
+        return 0;
+
+    return s->stack[s->top--];
+}
+
+// ---------------- PRIORITY ----------------
+
+int priority(char x)
+{
+    if (x == '^')
+        return 3;
+
+    if (x == '*' || x == '/')
+        return 2;
+
+    if (x == '+' || x == '-')
+        return 1;
+
+    return 0;
+}
+
+// ---------------- INFIX TO POSTFIX ----------------
+
+void infixToPostfix(char infix[], char postfix[])
+{
+    struct CharStack s;
+
+    s.top = -1;
+
+    int i = 0;
+    int j = 0;
+
+    char x;
+
+    while (infix[i] != '\0')
+    {
+        x = infix[i];
+
+        // Ignore spaces
+        if (x == ' ')
+        {
+            i++;
+            continue;
+        }
+
+        // Number
+        if (isdigit(x))
+        {
+            while (isdigit(infix[i]))
+            {
+                postfix[j++] = infix[i++];
+            }
+
+            
+            continue;
+        }
+
+        // Variable
+        if (isalpha(x))
+        {
+            postfix[j++] = x;
+            
+        }
+
+        // Opening bracket
+        else if (x == '(')
+        {
+            pushChar(&s, x);
+        }
+
+        // Closing bracket
+        else if (x == ')')
+        {
+            while (s.top != -1 && s.stack[s.top] != '(')
+            {
+                postfix[j++] = popChar(&s);
+               
+            }
+
+            if (s.top != -1)
+                popChar(&s);
+        }
+
+        // Operator
+        else if (x == '+' || x == '-' ||
+                 x == '*' || x == '/' || x == '^')
+        {
+            while (s.top != -1 &&
+                   s.stack[s.top] != '(' &&
+                   (priority(s.stack[s.top]) > priority(x) ||
+                   (priority(s.stack[s.top]) == priority(x) && x != '^')))
+            {
+                postfix[j++] = popChar(&s);
+                
+            }
+
+            pushChar(&s, x);
+        }
+
+        i++;
+    }
+
+    // Pop remaining operators
+    while (s.top != -1)
+    {
+        postfix[j++] = popChar(&s);
+       
+    }
+
+    postfix[j] = '\0';
+}
+
+// ---------------- GET VARIABLE VALUES ----------------
+
+void getVariableValues(char infix[], double value[])
+{
+    int i;
+    int found[26] = {0};
+
+    for (i = 0; infix[i] != '\0'; i++)
+    {
+        if (isalpha(infix[i]))
+        {
+            int index = tolower(infix[i]) - 'a';
+
+            if (!found[index])
+            {
+                printf("Enter value of %c: ", tolower(infix[i]));
+                scanf("%lf", &value[index]);
+
+                found[index] = 1;
+            }
+        }
+    }
+}
+
+// ---------------- POSTFIX EVALUATION ----------------
+
+double evaluatePostfix(char postfix[], double value[])
+{
+    struct IntStack s;
+
+    s.top = -1;
+
+    int i = 0;
+
+    double a, b;
+    double result;
+
+    while (postfix[i] != '\0')
+    {
+        // Skip spaces
+        if (postfix[i] == ' ')
+        {
+            i++;
+            continue;
+        }
+
+        // Number
+        if (isdigit(postfix[i]))
+        {
+            double number = 0;
+
+            while (isdigit(postfix[i]))
+            {
+                number = number * 10 + (postfix[i] - '0');
+                i++;
+            }
+
+            pushInt(&s, number);
+            continue;
+        }
+
+        // Variable
+        if (isalpha(postfix[i]))
+        {
+            int index = tolower(postfix[i]) - 'a';
+
+            pushInt(&s, value[index]);
+        }
+
+        // Operator
+        else
+        {
+            b = popInt(&s);
+            a = popInt(&s);
+
+            switch (postfix[i])
+            {
+                case '+':
+                    result = a + b;
+                    break;
+
+                case '-':
+                    result = a - b;
+                    break;
+
+                case '*':
+                    result = a * b;
+                    break;
+
+                case '/':
+                    result = a / b;
+                    break;
+
+                case '^':
+                    result = pow(a, b);
+                    break;
+
+                default:
+                    result = 0;
+            }
+
+            pushInt(&s, result);
+        }
+
+        i++;
+    }
+
+    return popInt(&s);
+}
+
+// ---------------- MAIN ----------------
+
+int main()
+{
+    char infix[MAX];
+    char postfix[MAX];
+
+    double value[26] = {0};
+
+    char choice;
+
+    do
+    {
+        printf("\nEnter infix expression: ");
+        scanf(" %[^\n]", infix);
+
+        // Convert
+        infixToPostfix(infix, postfix);
+
+        printf("\nPostfix expression: %s\n", postfix);
+
+        // Get variable values
+        getVariableValues(infix, value);
+
+        // Evaluate
+        printf("Result: %.2lf\n", evaluatePostfix(postfix, value));
+
+        printf("\nDo you want to continue? (y/n): ");
+        scanf(" %c", &choice);
+
+    } while (choice == 'y' || choice == 'Y');
+
+    printf("\nProgram ended.\n");
+
+    return 0;
+}
