@@ -310,7 +310,7 @@ int main()
     printf("\nProgram ended.\n");
 
 
-program 2
+program 2  queue 
 
 #include <stdio.h>
 
