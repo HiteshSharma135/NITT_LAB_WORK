@@ -1,0 +1,134 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Node {
+    char name[50];
+    char phone[20];
+    struct Node *left;
+    struct Node *right;
+};
+
+// Create a new node
+struct Node* createNode(char name[], char phone[]) {
+    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
+
+    strcpy(newNode->name, name);
+    strcpy(newNode->phone, phone);
+    newNode->left = NULL;
+    newNode->right = NULL;
+
+    return newNode;
+}
+
+// Insert a contact into the BST
+struct Node* insert(struct Node *root, char name[], char phone[]) {
+    if (root == NULL) {
+        return createNode(name, phone);
+    }
+
+    if (strcmp(name, root->name) < 0) {
+        root->left = insert(root->left, name, phone);
+    }
+    else if (strcmp(name, root->name) > 0) {
+        root->right = insert(root->right, name, phone);
+    }
+    else {
+        // Name already exists
+        strcpy(root->phone, phone);
+        printf("Contact updated successfully.\n");
+    }
+
+    return root;
+}
+
+// Search for a contact by name
+struct Node* search(struct Node *root, char name[]) {
+    if (root == NULL || strcmp(root->name, name) == 0) {
+        return root;
+    }
+
+    if (strcmp(name, root->name) < 0) {
+        return search(root->left, name);
+    }
+
+    return search(root->right, name);
+}
+
+// Display contacts in alphabetical order
+void display(struct Node *root) {
+    if (root != NULL) {
+        display(root->left);
+
+        printf("Name  : %s\n", root->name);
+        printf("Phone : %s\n", root->phone);
+        printf("----------------------\n");
+
+        display(root->right);
+    }
+}
+
+int main() {
+    struct Node *root = NULL;
+    struct Node *result;
+
+    int choice;
+    char name[50];        
+    char phone[20];
+
+    while (1) {
+        printf("\n===== PHONE BOOK =====\n");
+        printf("1. Add Contact\n");
+        printf("2. Search Contact\n");
+        printf("3. Display Phone Book\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter name: ");
+                scanf(" %[^\n]", name);
+
+                printf("Enter phone number: ");
+                scanf(" %[^\n]", phone);
+
+                root = insert(root, name, phone);
+                printf("Contact added successfully.\n");
+                break;
+
+            case 2:
+                printf("Enter name to search: ");
+                scanf(" %[^\n]", name);
+
+                result = search(root, name);
+
+                if (result != NULL) {
+                    printf("\nContact Found!\n");
+                    printf("Name  : %s\n", result->name);
+                    printf("Phone : %s\n", result->phone);
+                } else {
+                    printf("\nContact not found.\n");
+                }
+                break;
+
+            case 3:
+                if (root == NULL) {
+                    printf("\nPhone book is empty.\n");
+                } else {
+                    printf("\n===== CONTACTS =====\n");
+                    display(root);
+                }
+                break;
+
+            case 4:
+                printf("Exiting phone book...\n");
+                return 0;
+
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+    }
+
+    return 0;
+}4
